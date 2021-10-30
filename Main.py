@@ -102,7 +102,7 @@ def create_lambda_function(username, region):
             'S3Key': 'lambda_function.py'
         }
     )
-    # making the queue we created the lambda trigger
+    # making the queue we created the trigger for this specific lambda function
     client.create_event_source_mapping(
         BatchSize=5,
         EventSourceArn=f'arn:aws:sqs:us-east-1:399308550545:{username}-queue',
@@ -171,7 +171,7 @@ def main_menu():
     DELETE_ENV = '3'
     EXIT = '4'
 
-    while True:  # making sure that user name is valid and does not exist already
+    while True:  # making sure that user name is valid and does not already exist
         user_name = str(input("Please enter your user name: "))
         if MIN_USERNAME_LEN < len(user_name) < MAX_USERNAME_LEN and user_name.isalnum():
             if not is_user_exist(user_name):
@@ -185,7 +185,6 @@ def main_menu():
 
     while True:
         # asking user for input (his name and credentials)
-        # get the user name and the key for aws and make it an environment variable
 
         print("1. Create new enviorment")
         print("2. Upload file")
@@ -252,6 +251,7 @@ def main():
         os.environ['AWS_REGION'] = 'us-east-1'
 
         if check_aws_validity(user_aws_access_key_id, user_aws_secret_access_key):
+            # if the credentials are ok we enter the main menu
             main_menu()
         else:
             print("Invalid credentials please try again...")
